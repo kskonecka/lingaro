@@ -1,7 +1,7 @@
 (function (window) {
 
     'use strict';
-
+    var allAnimalsCost = 0;
     var data = {
             animals: window.animals,
             food: window.food
@@ -47,26 +47,41 @@
         table = $('<tbody></tbody>').appendTo(table);
 
         $.each(showAnimal, function (index, animal) {
+
+            // $.each(data.food, function (indexFood, valueFood) {
+            //   if (valueFood.id === animal.foodId) {
+            //     var fType = food[indexFood].foodType;
+            //     // console.log(food[indexFood].foodType); //tu sobie sprawdzam i w konsoli wypisuje jak trzeba
+            //     // return food[indexFood].foodType; //a nie wypisuje w tabelke (53)
+            //   }
+            // });
+
+            for (var i = 0; i < data.food.length; i++) {
+              if (data.food[i].id == animal.foodId) {
+                var fType = data.food[i].foodType;
+                var foodCost = data.food[i].cost;
+                // console.log(foodCost);
+                break;
+              }
+            }
+
+
+
             $('<tr></tr>').appendTo(table)
                 .append('<td>'+ animal.name +'</td>')
                 .append('<td>'+ animal.count +'</td>')
-                .append('<td>'+ foodPerAnimal() +'</td>') // TODO Find this animal food and place here food type
-                //powinno wypisac: oat, meat, grass, oat, oat, mouse
-                .append('<td>Calculate me</td>'); // TODO Calculate how many cost this animal to zoo per day. Formula: animal.count * animal.eatPerDay * food.cost
+                .append('<td>'+ fType +'</td>') // TODO Find this animal food and place here food type
+                .append('<td>'+ animal.count * animal.eatPerDay * foodCost +'</td>'); // TODO Calculate how many cost this animal to zoo per day. Formula: animal.count * animal.eatPerDay * food.cost
                 // console.log(food[animal.foodId]);
-              function foodPerAnimal() {
-                $.each(food, function (indexFood, valueFood) {
-                  if (valueFood.id === animal.foodId) {
-                    console.log(food[indexFood].foodType); //tu sobie sprawdzam i w konsoli wypisuje jak trzeba
-                    return food[indexFood].foodType; //a nie wypisuje w tabelke (53)
-                  }
-                });
-              }
+
+                allAnimalsCost += animal.count * animal.eatPerDay * foodCost;
+
         });
+
 
         $('<tr></tr>').appendTo($('<tfoot></tfoot>').appendTo(table.parent()))
             .append('<td colspan="3">All Animals cost per Day</td>')
-            .append('<td>Calculate me too</td>'); //TODO Find sum of all animals costs per day
+            .append('<td>'+ allAnimalsCost +'</td>'); //TODO Find sum of all animals costs per day
     }
 
 })(window);
